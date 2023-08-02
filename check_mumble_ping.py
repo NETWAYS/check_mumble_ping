@@ -28,7 +28,6 @@
 
 import sys
 import argparse
-import os
 import socket
 import datetime
 
@@ -70,10 +69,8 @@ def ping_mumble(host, port=64738):
         "len": len(data)
     }
 
-def main():
-    scriptname = os.path.basename(sys.argv[0])
-
-    parser = argparse.ArgumentParser(prog=scriptname)
+def commandline(args):
+    parser = argparse.ArgumentParser(prog="check_mumble_ping.py")
 
     parser.add_argument('-H', '--host', type=str, required=True,
                         help='Mumble host')
@@ -81,8 +78,10 @@ def main():
                         default=64738,
                         help='Mumble port (default is 64738')
 
-    args = parser.parse_args()
+    return parser.parse_args(args)
 
+
+def main(args):
     try:
         ping = ping_mumble(args.host, args.port)
         items = [
@@ -99,5 +98,14 @@ def main():
 
     return 0
 
-if __name__ == "__main__": # pragma: no cover
-    sys.exit(main())
+
+if __name__ == '__main__': # pragma: no cover
+    try:
+        ARGS = commandline(sys.argv[1:])
+        sys.exit(main(ARGS))
+    except SystemExit:
+        # Re-throw the exception
+        raise sys.exc_info()[1].with_traceback(sys.exc_info()[2]) # pylint: disable=raise-missing-from
+    except:
+        print("UNKNOWN - Error: %s" % (str(sys.exc_info()[1])))
+        sys.exit(3)
