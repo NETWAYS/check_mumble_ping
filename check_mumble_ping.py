@@ -30,10 +30,9 @@ import sys
 import argparse
 import os
 import socket
-import time
 import datetime
 
-from struct import *
+from struct import pack, unpack
 
 states = ["OK", "WARNING", "CRITICAL", "UNKNOWN"]
 
@@ -48,7 +47,7 @@ def ping_mumble(host, port=64738):
   buf = pack(">iQ", 0, datetime.datetime.now().microsecond)
   s.sendto(buf, (host, port))
 
-  data, addr = s.recvfrom(1024)
+  data, _ = s.recvfrom(1024)
 
   r = unpack(">bbbbQiii", data)
 
@@ -60,7 +59,8 @@ def ping_mumble(host, port=64738):
   # r[7] = bandwidth
 
   ping = (datetime.datetime.now().microsecond - r[4]) / 1000.0
-  if ping < 0: ping = ping + 1000
+  if ping < 0:
+      ping = ping + 1000
 
   return {
     "version": version,
@@ -97,10 +97,10 @@ def main():
 
     return return_plugin(0, ", ".join(items))
 
-  except e:
-    return return_plugin(3, "Error: could not send ping ({0})".format(e.message) )
+  except Exception as e: # pylint: disable=broad-except
+    return return_plugin(3, "Error: could not send ping ({0})".format(e) )
 
   return 0
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     sys.exit(main())
