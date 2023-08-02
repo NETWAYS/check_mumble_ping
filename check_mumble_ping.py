@@ -33,10 +33,16 @@ import datetime
 
 from struct import pack, unpack
 
-states = ["OK", "WARNING", "CRITICAL", "UNKNOWN"]
-
 def return_plugin(status, msg):
+    states = {
+        0: "OK",
+        1: "WARNING",
+        2: "CRITICAL",
+        3: "UNKNOWN"
+    }
+
     print("Mumble: {0} - {1}".format(states[status], msg))
+
     return status
 
 def ping_mumble(host, port=64738):
@@ -84,19 +90,18 @@ def commandline(args):
 def main(args):
     try:
         ping = ping_mumble(args.host, args.port)
-        items = [
-            "version={0[0]}.{0[1]}.{0[2]}".format(ping["version"]),
-            "user={0[0]}/{0[1]}".format(ping["user"]),
-            "time={:.2f}ms".format(ping["time"]),
-            "rate={:.2f}kbit/s".format(ping["rate"]/1000),
-            "len={:d}b".format(ping["len"])
-        ]
-        return return_plugin(0, ", ".join(items))
-
     except Exception as e: # pylint: disable=broad-except
         return return_plugin(3, "Error: could not send ping ({0})".format(e) )
 
-    return 0
+    items = [
+        "version={0[0]}.{0[1]}.{0[2]}".format(ping["version"]),
+        "user={0[0]}/{0[1]}".format(ping["user"]),
+        "time={:.2f}ms".format(ping["time"]),
+        "rate={:.2f}kbit/s".format(ping["rate"]/1000),
+        "len={:d}b".format(ping["len"])
+    ]
+
+    return return_plugin(0, ", ".join(items))
 
 
 if __name__ == '__main__': # pragma: no cover
