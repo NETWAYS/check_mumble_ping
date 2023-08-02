@@ -33,6 +33,8 @@ import datetime
 
 from struct import pack, unpack
 
+__version__ = '1.0.0'
+
 def return_plugin(status, msg):
     states = {
         0: "OK",
@@ -83,6 +85,7 @@ def commandline(args):
     parser.add_argument('-p', '--port', type=int, required=False,
                         default=64738,
                         help='Mumble port (default is 64738')
+    parser.add_argument('-v', '--version', action='version', version=f'%(prog)s {__version__}')
 
     return parser.parse_args(args)
 
