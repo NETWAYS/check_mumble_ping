@@ -25,7 +25,7 @@ class UtilTesting(unittest.TestCase):
     @mock.patch('builtins.print')
     def test_return_plugin(self, mock_print):
         return_plugin(0, "message")
-        mock_print.assert_called_with('Mumble: OK - message')
+        mock_print.assert_called_with('[OK] Mumble Ping Status - message')
 
     @mock.patch('check_mumble_ping.socket')
     def test_ping_mumble(self, mock_socket):

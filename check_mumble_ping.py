@@ -41,7 +41,7 @@ def return_plugin(status, msg):
         3: "UNKNOWN"
     }
 
-    print("Mumble: {0} - {1}".format(states[status], msg))
+    print("[{0}] Mumble Ping Status - {1}".format(states[status], msg))
 
     return status
 
