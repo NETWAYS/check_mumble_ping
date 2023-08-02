@@ -1,10 +1,16 @@
-# check_mumble_ping.py
+# check_mumble_ping
+
+Icinga Monitoring Plugin to check Mumble availability.
+
+## Installation
+
+The plugin requires at least Python 3.
 
 ## Usage
 
 ```
 ./check_mumble_ping.py -H mumble.netways.de -p 64738
-Mumble: OK - version=1.3.3, user=0/30, time=20.71ms, rate=72.00kbit/s, len=24b
+[OK] Mumble Ping Status - version=1.3.3, user=0/30, time=20.71ms, rate=72.00kbit/s, len=24b
 ```
 
 ## License
